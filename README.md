@@ -16,5 +16,5 @@ This repository will contain the intial on-prem version of the feldmanchain, whi
 
 ## run
 
-* `npm start:seeder` to run the seeder
-* `npm start:peer` to run a peer
+- `npm start:seeder` to run the seeder
+- `npm start:peer` to run a peer
