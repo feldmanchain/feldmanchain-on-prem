@@ -1,18 +1,19 @@
+/*
+  NOTE (Alan):
+
+  A peer is the least common denominator on the network,
+  and can be either one or many of a user, an auctioneer or a builder
+*/
+
 import dgram from "dgram"
-import {
-  capabilities,
-  seederAddress,
-  seederPort,
-} from "./peer-cli-arguments.js"
+import * as cliOptions from "./peer-cli-options.js"
 import { createMessage, parseMessage } from "../lib/network-message.js"
 
+const { capabilities, seederAddress, seederPort } = cliOptions
+
 const peer = {
-  seederAddress,
-  seederPort,
   capabilities,
 }
-
-console.log(peer)
 
 const server = dgram.createSocket("udp4")
 
@@ -30,20 +31,5 @@ server.connect(Number.parseInt(seederPort), seederAddress, () => {
     payload: peer,
   }
 
-  console.log(Number.parseInt(seederPort))
-
   server.send(createMessage(initializeMessage), Number.parseInt(seederPort)) // JSON.stringify(initializeMessage))
 })
-
-// const peers = {}
-
-// const addPeer = (key, value) => {
-//   peers[key] = value
-// }
-
-// const createPeer = (id) => ({
-//   id,
-//   ip: "127.0.0.1",
-// })
-
-// export { createPeer }
