@@ -31,5 +31,8 @@ server.connect(Number.parseInt(seederPort), seederAddress, () => {
     payload: peer,
   }
 
-  server.send(createMessage(initializeMessage), Number.parseInt(seederPort)) // JSON.stringify(initializeMessage))
+  // TODO(Alan): find out why the port needs to be specified when calling `send`
+  // According to the docs, if `connect` is called with the port prior to `send`,
+  // the port should be able to be omitted
+  server.send(createMessage(initializeMessage), Number.parseInt(seederPort))
 })
