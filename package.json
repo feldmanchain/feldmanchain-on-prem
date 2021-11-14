@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "feldmanchain-poc",
+  "name": "feldmanchain-on-prem",
   "version": "1.0.0",
   "description": "a PoC of feldmanchain",
   "main": "index.js",

@@ -8,8 +8,13 @@ This repository will contain the intial on-prem version of the feldmanchain, whi
 
 ### The planned features of this version are
 
-* A net of peers (project owners and builders) should be able to participate in a distributed p2p net
-* Project builders should be able to request a build
-* The p2p net should be able to match projects with compatible builders
-    - There should be some simple distribution mechanics (perhaps some version of round-robin)
-* Builders should be able to perform builds
+- A net of peers (project owners and builders) should be able to participate in a distributed p2p net
+- Project builders should be able to request a build
+- The p2p net should be able to match projects with compatible builders
+  - There should be some simple distribution mechanics (perhaps some version of round-robin)
+- Builders should be able to perform builds
+
+## run
+
+* `npm start:seeder` to run the seeder
+* `npm start:peer` to run a peer
