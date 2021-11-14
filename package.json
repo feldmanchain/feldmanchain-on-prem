@@ -1,0 +1,16 @@
+{
+  "type": "module",
+  "name": "feldmanchain-poc",
+  "version": "1.0.0",
+  "description": "a PoC of feldmanchain",
+  "main": "index.js",
+  "scripts": {
+    "start:seeder": "node ./src/seeder/seeder.js",
+    "start:peer": "node ./src/peer/peer.js -c nodejs,csharp -s 0.0.0.0:41234"
+  },
+  "author": "Alan Smithee",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^8.3.0"
+  }
+}
