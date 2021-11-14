@@ -12,9 +12,8 @@
 const createMessage = (data) => {
   const string = JSON.stringify(data)
   const buffer = Buffer.from(string, "binary")
-  // const arrayBuffer = buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength)
 
-  return buffer // arrayBuffer
+  return buffer
 }
 
 const parseMessage = (message) => {
