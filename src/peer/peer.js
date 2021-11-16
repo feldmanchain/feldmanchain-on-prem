@@ -7,7 +7,7 @@
 
 import dgram from "dgram"
 import * as cliOptions from "./peer-cli-options.js"
-import { createMessage, parseMessage } from "../lib/network-message.js"
+import { createMessageSender, parseMessage } from "../lib/network-message.js"
 
 const { capabilities, seederAddress, seederPort } = cliOptions
 
@@ -17,22 +17,44 @@ const peer = {
 
 const server = dgram.createSocket("udp4")
 
-server.on("message", (msg, { address, port }) => {
-  const parsedMessage = parseMessage(msg)
+const handle_message = (address, port, type, payload) => {
+  switch (type) {
+    case "peer_added":
+      peer.id = payload.id
+      peer.address = payload.address
+      peer.port = payload.port
 
-  console.log("received message", parsedMessage, `from ${address}:${port}`)
+      console.log("peer added:", peer)
+
+      break
+
+    default:
+      break
+  }
+}
+
+server.on("message", (msg, { address, port }) => {
+  const { type, payload } = parseMessage(msg)
+
+  handle_message(address, port, type, payload)
 })
 
-server.connect(Number.parseInt(seederPort), seederAddress, () => {
+const sendToSeeder = createMessageSender(server, seederPort, seederAddress)
+
+server.on("listening", () => {
   console.log("peer connected")
 
-  const initializeMessage = {
-    type: "initialize",
+  sendToSeeder({
+    type: "add_peer",
     payload: peer,
-  }
+  })
 
-  // TODO(Alan): find out why the port needs to be specified when calling `send`
-  // According to the docs, if `connect` is called with the port prior to `send`,
-  // the port should be able to be omitted
-  server.send(createMessage(initializeMessage), Number.parseInt(seederPort))
+  setInterval(() => {
+    sendToSeeder({
+      type: "heart_beat",
+      payload: peer,
+    })
+  }, 1000 * 60) // NOTE(Alan): inform the seeder that we are alive once every minute
 })
+
+server.bind() // NOTE(Alan): Let the OS specify the port

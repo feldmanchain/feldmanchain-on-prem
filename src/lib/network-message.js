@@ -23,4 +23,14 @@ const parseMessage = (message) => {
   return json
 }
 
-export { createMessage, parseMessage }
+// NOTE(Alan): "binds" a server.send function to a fixed server and optionally a fixed port and address
+const createMessageSender =
+  (server, defaultPort, defaultAddress) => (message, port, address) => {
+    server.send(
+      createMessage(message),
+      Number.parseInt(defaultPort || port),
+      defaultAddress || address
+    )
+  }
+
+export { createMessage, parseMessage, createMessageSender }

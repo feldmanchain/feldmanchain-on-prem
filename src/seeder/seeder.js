@@ -14,6 +14,14 @@ import { createMessage, parseMessage } from "../lib/network-message.js"
 
 let next_index = 0
 
+/*
+  NOTE(Alan): does it make sense to have a Set here?
+
+  Maybe an array where the index is the id makes more sense,
+  which would allow for faster access time, given a Kademlia implementation
+  where a peer's peers are know to be at position n+1, n+2, n+4, n+8, n+16 ...
+  (this is a half-truth, but somewhat close enough)
+*/
 const peers = new Set()
 
 const server = dgram.createSocket("udp4")
@@ -24,46 +32,46 @@ server.on("error", ({ stack }) => {
   server.close()
 })
 
+const handle_message = (address, port, type, payload) => {
+  switch (type) {
+    case "add_peer":
+      const peer = {
+        id: next_index++,
+        address,
+        port,
+      }
+
+      peers.add(peer)
+
+      const peerAddedMessage = createMessage({
+        type: "peer_added",
+        payload: peer,
+      })
+
+      server.send(peerAddedMessage, port, address)
+
+      // TODO(Alan): Also notify "related" peers
+      break
+
+    case "heart_beat":
+      console.log("peer heart beat:", payload)
+      break
+
+    default:
+      break
+  }
+}
+
 server.on("message", (msg, { address, port }) => {
-  const parsedMessage = parseMessage(msg)
+  const { type, payload } = parseMessage(msg)
 
-  const peer = {
-    id: next_index++,
-    address,
-    port,
-  }
-
-  peers.add(peer)
-
-  console.log("server got", parsedMessage, `from ${address}:${port}`)
-
-  const peerAddedMessage = {
-    type: "peer_added",
-    payload: peer,
-  }
-
-  server.send(createMessage(peerAddedMessage), port, address)
+  handle_message(address, port, type, payload)
 })
 
 server.on("listening", () => {
   const { address, port } = server.address()
 
   console.log(`server listening ${address}:${port}`)
-
-  setInterval(() => {
-    for (const peer of peers) {
-      const message = createMessage({
-        type: "ping",
-        payload: { peer },
-      })
-
-      server.send(message, peer.port, peer.address, (error) => {
-        if (error) {
-          console.log("peer", peer.id, "disconnected")
-        }
-      })
-    }
-  }, 1000)
 })
 
 server.bind(41234)
