@@ -16,12 +16,12 @@ const program = new Command()
 
 program.version("0.0.1")
 
-program.option("-s, --seeder [seeder]", "seeder address", "0.0.0.0")
+program.option("-s, --seeder [seeder]", "seeder address", "0.0.0.0:41234")
 
 program.option(
   "-c, --capabilities [capabilities...]",
   "builder capabilities",
-  []
+  ["nodejs"]
 )
 
 program.parse()

@@ -48,13 +48,6 @@ server.on("listening", () => {
     type: "add_peer",
     payload: peer,
   })
-
-  setInterval(() => {
-    sendToSeeder({
-      type: "heart_beat",
-      payload: peer,
-    })
-  }, 1000 * 60) // NOTE(Alan): inform the seeder that we are alive once every minute
 })
 
 server.bind() // NOTE(Alan): Let the OS specify the port

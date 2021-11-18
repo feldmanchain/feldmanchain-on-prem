@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start:seeder": "node ./src/seeder/seeder.js",
-    "start:peer": "node ./src/peer/peer.js -c nodejs,csharp -s 0.0.0.0:41234"
+    "start:peer": "node ./src/peer/peer.js"
   },
   "author": "Alan Smithee",
   "license": "MIT",
