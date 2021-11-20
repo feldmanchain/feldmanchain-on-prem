@@ -16,26 +16,25 @@ import { addPeer, removePeer } from "./seeder-peers.js"
 const server = dgram.createSocket("udp4")
 
 server.on("error", ({ stack }) => {
-  console.log(`received message:\n${stack}`)
+  console.log("error", stack)
 
   server.close()
 })
 
 const handle_message = (address, port, type, payload) => {
   switch (type) {
-    case "add_peer":
+    case "seed_peer":
       const peer = addPeer(address, port)
 
-      console.log("peer added:", peer)
+      console.log("peer added:", peer.id)
 
       const peerAddedMessage = createMessage({
-        type: "peer_added",
+        type: "peer_seeded",
         payload: peer,
       })
 
       server.send(peerAddedMessage, port, address)
 
-      // TODO(Alan): Also notify "related" peers
       break
 
     case "remove_peer":
@@ -62,7 +61,7 @@ server.on("message", (msg, { address, port }) => {
 server.on("listening", () => {
   const { address, port } = server.address()
 
-  console.log(`server listening ${address}:${port}`)
+  console.log("seeder listening", address, port)
 })
 
 server.bind(41234)
