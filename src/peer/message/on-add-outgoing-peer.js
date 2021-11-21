@@ -2,7 +2,7 @@ import { createMessageSender } from "../../lib/network-message.js"
 import { peer } from "../peer.js"
 
 const onAddOutgoingPeer = (server, payload) => {
-  console.log("add outgoing peer", payload.id)
+  console.log("added outgoing peer", payload.id)
 
   if (!peer.outgoingPeers.some((p) => p.id === payload.id)) {
     peer.outgoingPeers.push(payload)
