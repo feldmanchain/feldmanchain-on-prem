@@ -30,13 +30,28 @@ const createNode = async () => {
 
 const node = await createNode()
 
-node.on("peer:discovery", (peerId) =>
+// TODO(Alan): how to listen to messages?
+
+let pingIntervalHandle = null
+
+node.on("peer:discovery", async (peerId) => {
   console.log("Discovered:", peerId.toB58String())
-)
+
+  pingIntervalHandle = setInterval(async () => {
+    const ms = await node.ping(peerId)
+
+    console.log("pinged", peerId.toB58String(), "in", ms, "ms")
+  }, 5000) // ping every 5 secs
+})
 
 await node.start()
 
 const stop = async () => {
+  if (pingIntervalHandle) {
+    clearInterval(pingIntervalHandle)
+    pingIntervalHandle = null
+  }
+
   // stop libp2p
   await node.stop()
 
