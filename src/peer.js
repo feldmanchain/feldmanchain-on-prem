@@ -8,7 +8,13 @@ import {
   logDialerInfo,
   logNodeStartedInfo,
 } from "./utility/log.js"
-import { stdinToStream, streamToConsole } from "./stream.js"
+import {
+  setStdinEncodingToUtf8,
+  stdinToStream,
+  streamToConsole,
+} from "./stream.js"
+
+setStdinEncodingToUtf8()
 
 const createNode = async () => {
   const node = await Libp2p.create({
