@@ -3,6 +3,12 @@ import TCP from "libp2p-tcp"
 import { NOISE } from "libp2p-noise"
 import MPlex from "libp2p-mplex"
 import MulticastDNS from "libp2p-mdns"
+import {
+  logDiscoveredInfo,
+  logDialerInfo,
+  logNodeStartedInfo,
+} from "./utility/log.js"
+import { stdinToStream, streamToConsole } from "./stream.js"
 
 const createNode = async () => {
   const node = await Libp2p.create({
@@ -30,33 +36,30 @@ const createNode = async () => {
 
 const node = await createNode()
 
-// TODO(Alan): how to listen to messages?
-
-let pingIntervalHandle = null
-
 node.on("peer:discovery", async (peerId) => {
-  console.log("Discovered:", peerId.toB58String())
+  logDiscoveredInfo(peerId)
 
-  pingIntervalHandle = setInterval(async () => {
-    const ms = await node.ping(peerId)
+  const { stream } = await node.dialProtocol(peerId, "/chat/1.0.0")
 
-    console.log("pinged", peerId.toB58String(), "in", ms, "ms")
-  }, 5000) // ping every 5 secs
+  logDialerInfo()
+
+  stdinToStream(stream)
+  streamToConsole(stream)
+})
+
+await node.handle("/chat/1.0.0", async ({ stream }) => {
+  stdinToStream(stream)
+  streamToConsole(stream)
 })
 
 await node.start()
 
-const stop = async () => {
-  if (pingIntervalHandle) {
-    clearInterval(pingIntervalHandle)
-    pingIntervalHandle = null
-  }
+logNodeStartedInfo(node)
 
-  // stop libp2p
+const stop = async () => {
   await node.stop()
 
   console.log("libp2p has stopped")
-
   process.exit(0)
 }
 
