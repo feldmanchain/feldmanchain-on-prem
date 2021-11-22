@@ -3,14 +3,13 @@
   "name": "feldmanchain-on-prem",
   "version": "1.0.0",
   "description": "a PoC of feldmanchain as run on a trusted net on premises",
-  "main": "index.js",
-  "scripts": {
-    "start:peer": "node ./src/peer/peer.js nodejs"
-  },
+  "main": "src/peer.js",
   "author": "Alan Smithee",
   "license": "MIT",
+  "scripts": {
+    "start": "node ./src/peer.js"
+  },
   "dependencies": {
-    "commander": "^8.3.0",
     "libp2p": "^0.33.0",
     "libp2p-mdns": "^0.17.0",
     "libp2p-mplex": "^0.10.4",
