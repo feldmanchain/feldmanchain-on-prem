@@ -1,8 +1,8 @@
 import Libp2p from "libp2p"
 import TCP from "libp2p-tcp"
-import { NOISE } from "libp2p-noise"
 import MPlex from "libp2p-mplex"
 import MulticastDNS from "libp2p-mdns"
+import { NOISE } from "@chainsafe/libp2p-noise"
 import {
   logDiscoveredInfo,
   logDialerInfo,
@@ -47,10 +47,21 @@ node.on("peer:discovery", async (peerId) => {
 
   const { stream } = await node.dialProtocol(peerId, "/chat/1.0.0")
 
+  // var peerIds = Array.from(node.peerStore.peers, ([_, p]) => p.id.toB58String())
+
+  // console.log(peerIds)
   logDialerInfo()
 
   stdinToStream(stream)
   streamToConsole(stream)
+})
+
+node.on("peer:disconnect", async (peerId) => {
+  console.log("disconnect", peerId.toB58String())
+})
+
+node.on("peer:disconnected", async (peerId) => {
+  console.log("disconnected", peerId.toB58String())
 })
 
 await node.handle("/chat/1.0.0", async ({ stream }) => {

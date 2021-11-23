@@ -1,15 +1,20 @@
 {
   "type": "module",
   "name": "feldmanchain-on-prem",
+  "engines": {
+    "node": "^16.13.0"
+  },
   "version": "1.0.0",
   "description": "a PoC of feldmanchain as run on a trusted net on premises",
   "main": "src/peer.js",
   "author": "Alan Smithee",
   "license": "MIT",
   "scripts": {
-    "start": "node ./src/peer.js"
+    "start": "node ./src/peer.js",
+    "start:mdns-test": "node ./src/mdns-test.js"
   },
   "dependencies": {
+    "@chainsafe/libp2p-noise": "^4.1.1",
     "it-length-prefixed": "^5.0.3",
     "it-pipe": "^1.1.0",
     "libp2p": "^0.30.3",
