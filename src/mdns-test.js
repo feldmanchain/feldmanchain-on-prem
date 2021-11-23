@@ -1,7 +1,6 @@
 import MulticastDNS from "libp2p-mdns"
 import { Multiaddr } from "multiaddr"
 import PeerId from "peer-id"
-import { logNodeStartedInfo } from "./utility/log.js"
 
 const peerId = await PeerId.create()
 
