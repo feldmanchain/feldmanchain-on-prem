@@ -19,4 +19,24 @@ const logNodeStartedInfo = (node) => {
   console.log("\n")
 }
 
-export { logDiscoveredInfo, logDialerInfo, logNodeStartedInfo }
+const logUnsupportedProtocol = (peerId, protocol) => {
+  console.log(
+    "The peer",
+    peerId.toB58String(),
+    "does not support the protocol",
+    protocol
+  )
+  console.log("\n")
+}
+
+const logStoppedMessage = () => {
+  console.log("libp2p has stopped")
+}
+
+export {
+  logDiscoveredInfo,
+  logDialerInfo,
+  logNodeStartedInfo,
+  logUnsupportedProtocol,
+  logStoppedMessage,
+}
