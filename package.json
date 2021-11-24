@@ -10,8 +10,7 @@
   "author": "Alan Smithee",
   "license": "MIT",
   "scripts": {
-    "start": "node ./src/peer.js",
-    "start:mdns-test": "node ./src/mdns-test.js"
+    "start": "node ./src/peer.js"
   },
   "dependencies": {
     "@chainsafe/libp2p-noise": "^4.1.1",
