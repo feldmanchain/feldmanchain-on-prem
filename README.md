@@ -20,4 +20,6 @@ Work In Progress **NOT** ready for use
 
 ## Run instructions
 
-`npm start` to run the peer
+`npm start`
+
+When running the peer with `npm start` it will look for a peer id in the `peer-ids` folder and use the first one it finds. If it does not find one, one will be created and then used for the current and future runs. You can optionally provide a `name` argument like `npm start alan` which will look for (and create if it doesn't exist) a peer id file with the given name. This functionality allows for persistent peer ids across runs, and makes it possible to test with multiple peers with different ids.
