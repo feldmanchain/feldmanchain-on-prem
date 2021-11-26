@@ -24,7 +24,13 @@ Work In Progress **NOT** ready for use
 
 Runs the peer.
 
-When running the peer it will look for a peer id in the `peer-ids` folder and use the first one it finds. If it does not find one, one will be created and then used for the current and future runs. Optionally, you can provide a `--peer-name` argument like `npm start -- --peer-name=alan` which will look for (and if it doesn't exist, create) a peer id file with the given name. This functionality allows for persistent peer ids across runs, and makes it possible to test with multiple peers with different ids.
+When running the peer, the program will look for a peer id in the `peer-ids` folder and use the first one it finds. If it does not find one, one will be created and then used for the current and future runs. Optionally, you can provide a `--peer-name` argument like:
+
+```bash
+npm start -- --peer-name=alan
+```
+
+which will make the program look for (and if it doesn't exist, create) a peer id file with the given name. This functionality allows for persistent peer ids across runs, and makes it possible to test with multiple peers with different ids.
 
 ### Available flags
 
