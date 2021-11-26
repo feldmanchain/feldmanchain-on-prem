@@ -1,36 +1,40 @@
+import { disableLogging } from "./cli-options.js"
+
+const log = disableLogging ? () => {} : console.log
+
 const logDiscoveredInfo = (peerId) => {
-  console.log("Discovered:", peerId.toB58String())
-  console.log("\n")
+  log("Discovered:", peerId.toB58String())
+  log("\n")
 }
 
 const logDialerInfo = () => {
-  console.log("Dialer dialed to listener on protocol: /chat/1.0.0")
-  console.log("Type a message and see what happens")
-  console.log("\n")
+  log("Dialer dialed to listener on protocol: /chat/1.0.0")
+  log("Type a message and see what happens")
+  log("\n")
 }
 
 const logNodeStartedInfo = (node) => {
-  console.log("Listener ready, listening on:")
+  log("Listener ready, listening on:")
 
   node.multiaddrs.forEach((ma) => {
-    console.log(`${ma.toString()}/p2p/${node.peerId.toB58String()}`)
+    log(`${ma.toString()}/p2p/${node.peerId.toB58String()}`)
   })
 
-  console.log("\n")
+  log("\n")
 }
 
 const logUnsupportedProtocol = (peerId, protocol) => {
-  console.log(
+  log(
     "The peer",
     peerId.toB58String(),
     "does not support the protocol",
     protocol
   )
-  console.log("\n")
+  log("\n")
 }
 
 const logStoppedMessage = () => {
-  console.log("libp2p has stopped")
+  log("libp2p has stopped")
 }
 
 export {
