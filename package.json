@@ -6,14 +6,15 @@
   },
   "version": "1.0.0",
   "description": "a PoC of feldmanchain as run on a trusted net on premises",
-  "main": "src/peer.js",
+  "main": "src/index.js",
   "author": "Alan Smithee",
   "license": "MIT",
   "scripts": {
-    "start": "node ./src/peer.js"
+    "start": "node ./src/index.js"
   },
   "dependencies": {
     "@chainsafe/libp2p-noise": "^4.1.1",
+    "commander": "^8.3.0",
     "it-length-prefixed": "^5.0.3",
     "it-pipe": "^1.1.0",
     "libp2p": "^0.30.3",

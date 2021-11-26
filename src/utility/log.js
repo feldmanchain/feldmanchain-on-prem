@@ -1,22 +1,53 @@
+/*
+  NOTE(Alan):
+
+  Utility functions for logging information.
+  Can be silenced with the -q option: npm start -- -q
+*/
+
+import { quiet } from "./cli-options.js"
+
+const log = quiet ? () => {} : console.log
+
 const logDiscoveredInfo = (peerId) => {
-  console.log("Discovered:", peerId.toB58String())
-  console.log("\n")
+  log("Discovered:", peerId.toB58String())
+  log("\n")
 }
 
 const logDialerInfo = () => {
-  console.log("Dialer dialed to listener on protocol: /chat/1.0.0")
-  console.log("Type a message and see what happens")
-  console.log("\n")
+  log("Dialer dialed to listener on protocol: /chat/1.0.0")
+  log("Type a message and see what happens")
+  log("\n")
 }
 
 const logNodeStartedInfo = (node) => {
-  console.log("Listener ready, listening on:")
+  log("Listener ready, listening on:")
 
   node.multiaddrs.forEach((ma) => {
-    console.log(`${ma.toString()}/p2p/${node.peerId.toB58String()}`)
+    log(`${ma.toString()}/p2p/${node.peerId.toB58String()}`)
   })
 
-  console.log("\n")
+  log("\n")
 }
 
-export { logDiscoveredInfo, logDialerInfo, logNodeStartedInfo }
+const logUnsupportedProtocol = (peerId, protocol) => {
+  log(
+    "The peer",
+    peerId.toB58String(),
+    "does not support the protocol",
+    protocol
+  )
+  log("\n")
+}
+
+const logStoppedMessage = () => {
+  log("libp2p has stopped")
+}
+
+export {
+  logDiscoveredInfo,
+  logDialerInfo,
+  logNodeStartedInfo,
+  logUnsupportedProtocol,
+  logStoppedMessage,
+}
