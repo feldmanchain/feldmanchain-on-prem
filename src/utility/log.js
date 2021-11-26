@@ -1,3 +1,10 @@
+/*
+  NOTE(Alan):
+
+  Utility functions for logging information.
+  Can be silenced with the -q option: npm start -- -q
+*/
+
 import { quiet } from "./cli-options.js"
 
 const log = quiet ? () => {} : console.log

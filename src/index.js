@@ -1,5 +1,12 @@
+/*
+  NOTE(Alan):
+
+  Entrypoint of the program. Creates and starts a peer,
+  also sets up handlers and dials in to listening peers.
+*/
+
 import * as logger from "./utility/log.js"
-import * as streamer from "./stream.js"
+import * as streamer from "./utility/stream.js"
 import { createNode } from "./create-node.js"
 
 streamer.setStdinEncodingToUtf8()

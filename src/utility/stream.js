@@ -1,9 +1,12 @@
+/*
+  NOTE(Alan):
+
+  Stream utility function, for reading to/from a stream and to/from stdin.
+  This code is copied from https://github.com/libp2p/js-libp2p/blob/master/examples/chat/src/stream.js
+*/
+
 import pipe from "it-pipe"
 import lp from "it-length-prefixed"
-
-/*
-  NOTE(Alan): This code is taken from https://github.com/libp2p/js-libp2p/blob/master/examples/chat/src/stream.js
-*/
 
 // NOTE(Alan): Set the stdin encoding to utf8
 const setStdinEncodingToUtf8 = () => process.stdin.setEncoding("utf8")
@@ -18,7 +21,7 @@ const streamToConsole = (stream) => {
   pipe(stream.source, lp.decode(), consoleSink)
 }
 
-// NOTE(Alan): Console sink function, read each chunk of data and output as a utf8 string to the console
+// NOTE(Alan): console sink function, read each chunk of data and output as a utf8 string to the console
 const consoleSink = async (source) => {
   for await (const msg of source) {
     console.log("> " + msg.toString().replace("\n", ""))

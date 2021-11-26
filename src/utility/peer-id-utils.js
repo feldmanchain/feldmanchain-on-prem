@@ -1,9 +1,12 @@
 /*
   NOTE(Alan):
 
-  This file contains functionality related to generating and fetching peer ids for the running node. 
+  Functionality related to generating and loading peer ids.
+  Is used to enable consistent peer ids across runs.
 
-  TODO: Refactor this for readability
+  {loadPeerId} is the only public-facing function of this file.
+  If invoked with a {peerName}, that file will be (created and) loaded,
+  else, the first available peer id file will be (created and) loaded.
 */
 
 import fs from "fs"
@@ -12,19 +15,40 @@ import PeerId from "peer-id"
 
 const peerIdsFolder = path.resolve(process.cwd(), "peer-ids")
 
-const createPeerIdAndSaveToFile = async (peerIdFilename) => {
+const createPeerIdAndSaveToFile = async (peerName) => {
   const peerId = await PeerId.create()
 
-  const fileName = peerIdFilename || peerId.toB58String()
-  const filePath = path.join(peerIdsFolder, `${fileName}.json`)
+  const fileName = `${peerName || peerId.toB58String()}.json`
+  const filePath = path.join(peerIdsFolder, fileName)
 
   const peerIdJsonContents = JSON.stringify(peerId.toJSON(), null, 4)
 
   fs.writeFileSync(filePath, peerIdJsonContents, { encoding: "utf8" })
 }
 
-const getPeerIdByFilename = async (peerIdFilename) => {
-  const filePath = path.join(peerIdsFolder, peerIdFilename)
+const getFilename = (peerName) => {
+  if (peerName) {
+    return `${peerName}.json`
+  }
+
+  const [file] = fs.readdirSync(peerIdsFolder, { encoding: "utf8" })
+
+  return file || null
+}
+
+const readPeerIdFromFile = async (peerName) => {
+  const filename = getFilename(peerName)
+
+  if (!filename) {
+    return null
+  }
+
+  const filePath = path.join(peerIdsFolder, filename)
+
+  if (!fs.existsSync(filePath)) {
+    return null
+  }
+
   const fileContents = fs.readFileSync(filePath, { encoding: "utf8" })
 
   const peerIdJson = JSON.parse(fileContents)
@@ -33,34 +57,18 @@ const getPeerIdByFilename = async (peerIdFilename) => {
   return peerId
 }
 
-const getFirstAvailablePeerId = async (peerIdFilename) => {
-  if (peerIdFilename) {
-    if (!fs.existsSync(path.join(peerIdsFolder, `${peerIdFilename}.json`))) {
-      return null
-    }
+const loadPeerId = async (peerName) => {
+  let peerId = await readPeerIdFromFile(peerName)
 
-    return await getPeerIdByFilename(`${peerIdFilename}.json`)
+  if (peerId) {
+    return peerId
   }
 
-  const files = fs.readdirSync(peerIdsFolder)
+  await createPeerIdAndSaveToFile(peerName)
 
-  if (files.length <= 0) {
-    return null
-  }
-
-  return await getPeerIdByFilename(files[0])
-}
-
-const getPeerId = async (peerIdFilename) => {
-  let peerId = await getFirstAvailablePeerId(peerIdFilename)
-
-  if (peerId === null) {
-    await createPeerIdAndSaveToFile(peerIdFilename)
-
-    peerId = await getFirstAvailablePeerId(peerIdFilename)
-  }
+  peerId = await readPeerIdFromFile(peerName)
 
   return peerId
 }
 
-export { getPeerId }
+export { loadPeerId }
