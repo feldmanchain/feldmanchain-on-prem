@@ -22,4 +22,12 @@ Work In Progress **NOT** ready for use
 
 `npm start`
 
-When running the peer with `npm start` it will look for a peer id in the `peer-ids` folder and use the first one it finds. If it does not find one, one will be created and then used for the current and future runs. You can optionally provide a `name` argument like `npm start alan` which will look for (and create if it doesn't exist) a peer id file with the given name. This functionality allows for persistent peer ids across runs, and makes it possible to test with multiple peers with different ids.
+Runs the peer.
+
+When running the peer it will look for a peer id in the `peer-ids` folder and use the first one it finds. If it does not find one, one will be created and then used for the current and future runs. Optionally, you can provide a `--peer-name` argument like `npm start -- --peer-name=alan` which will look for (and if it doesn't exist, create) a peer id file with the given name. This functionality allows for persistent peer ids across runs, and makes it possible to test with multiple peers with different ids.
+
+### Available flags
+
+- `-c, --capabilities`, the building capabilities of the node (`nodejs`, `c#`, etc)
+- `-n, --peer-name`, filename of the file containing the cryptographic key of the peer id
+- `-q, --quiet`, disable logging

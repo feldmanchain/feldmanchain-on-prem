@@ -1,6 +1,6 @@
-import { disableLogging } from "./cli-options.js"
+import { quiet } from "./cli-options.js"
 
-const log = disableLogging ? () => {} : console.log
+const log = quiet ? () => {} : console.log
 
 const logDiscoveredInfo = (peerId) => {
   log("Discovered:", peerId.toB58String())

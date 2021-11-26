@@ -15,11 +15,11 @@ const program = new Command()
 program
   .version("0.0.1")
   .option("-c, --capabilities [string...]", "Capabilities", [])
-  .option("-dl, --disable-logging", "Disable logging")
-  .option("-pn, --peer-name [string]", "The peerId filename", undefined)
+  .option("-q, --quiet", "Disable logging")
+  .option("-n, --peer-name [string]", "The peerId filename", undefined)
 
 program.parse()
 
-const { capabilities, peerName, disableLogging } = program.opts()
+const { capabilities, peerName, quiet } = program.opts()
 
-export { capabilities, peerName, disableLogging }
+export { capabilities, peerName, quiet }
