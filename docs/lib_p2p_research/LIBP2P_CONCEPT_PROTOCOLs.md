@@ -34,7 +34,7 @@ libp2p sends data over a bi-directional binary stream with the following propert
 - Supports backpressure
   - Readers can’t be flooded by eager writers
 
-On top of this, these streams are both secure and multiplexed, which is opaquely handled by libp2p. You can send data over a protocol stream in any format and structure you want, but the built in protocols transmit data as protocol buffers (protobufs), which is somewhat recommended. Messages are sent as binary data, prefixed with an integer (encoded as a protobuf varint) that represents the length of the payload in bytes.
+On top of this, these streams are both secure and multiplexed, which is transparently handled by libp2p. You can send data over a protocol stream in any format and structure you want, but the built in protocols transmit data as protocol buffers (protobufs), which is somewhat recommended. Messages are sent as binary data, prefixed with an integer (encoded as a protobuf varint) that represents the length of the payload in bytes.
 
 ## Built in Protocols
 
