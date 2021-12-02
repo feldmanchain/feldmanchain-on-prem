@@ -37,7 +37,8 @@ Every peer in libp2p has a PeerId which is a private and corresponding cryptogra
 
 ## Peer routing
 
-Peer routing is the process of discovering the address of a peer in the network. This can be done by different methods, such as a Kademlia DHT or multicast DNS.
+Peer routing is the process of discovering the address of a peer in the network. This can be done by different methods, such as a Kademlia DHT or multicast DNS (mdns). This is not the same as identifying a peer, since you first need to use some method of discovery before you can identify it. In general, there are two categories of discovery mechanics, which are suitable depending on the preconditions of the peer joining the network: `ambient` and `active` discovery. In short, ambient discovery allows a peer to discover peers outside of libp2p using mdns, bootstrap, bluetooth etc, and active discovery lets you discover peers within a libp2p network using DHTs or rendezvous servers.
+
 
 ## Switches
 

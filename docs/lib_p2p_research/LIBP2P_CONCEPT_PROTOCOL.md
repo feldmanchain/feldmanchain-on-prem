@@ -17,7 +17,7 @@ There are some inconsistencies in the naming convention and version numbers of t
 
 To listen to a protocol, you set up a handler for the specific protocol id. The handler is then invoked every time an incoming stream is tagged with the protocol id (handled by the transport switch). A match function can be used to accept non-exact string matches for example to match on semantic major versions.
 
-## PRotocol Negotiation
+## Protocol Negotiation
 
 When dialing out to initiate a new stream, the protocol id is sent. The receiving (listening) peer checks this against registered handlers, and if a match is found the peer will echo the protocol id the back to the dialer. If the protocol is not supported by the listener, the stream is ended.
 
