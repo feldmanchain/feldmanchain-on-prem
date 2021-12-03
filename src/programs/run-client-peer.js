@@ -5,10 +5,7 @@
   should handle all I/O between user and program.
 */
 
-import * as streamer from "../utility/stream.js"
 import { ClientPeer } from "../peers/client-peer.js"
-
-streamer.setStdinEncodingToUtf8()
 
 const peer = await ClientPeer.create()
 
