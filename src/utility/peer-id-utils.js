@@ -1,10 +1,11 @@
 /*
   NOTE(Alan):
 
-  Functionality related to generating and loading peer ids.
-  Is used to enable consistent peer ids across runs.
+  Functionality related to generating and loading peer ids,
+  used to enable consistent peer ids across runs.
 
   {loadPeerId} is the only public-facing function of this file.
+  
   If invoked with a {peerName}, that file will be (created and) loaded,
   else, the first available peer id file will be (created and) loaded.
 */
@@ -58,6 +59,10 @@ const readPeerIdFromFile = async (peerName) => {
 }
 
 const loadPeerId = async (peerName) => {
+  if (peerName) {
+    peerName = path.parse(peerName).name
+  }
+
   let peerId = await readPeerIdFromFile(peerName)
 
   if (peerId) {

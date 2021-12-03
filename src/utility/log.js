@@ -2,6 +2,7 @@
   NOTE(Alan):
 
   Utility functions for logging information.
+
   Can be silenced with the -q option: npm start -- -q
 */
 
@@ -42,6 +43,12 @@ const logUnsupportedProtocol = (peerId, protocol) => {
 
 const logStoppedMessage = () => {
   log("libp2p has stopped")
+  log("\n")
+}
+
+const logBuilderSubMessage = (from, metaData) => {
+  log("INCOMING BUILD REQUEST\nfrom:", from, "\nmetadata:", metaData)
+  log("\n")
 }
 
 export {
@@ -50,4 +57,5 @@ export {
   logNodeStartedInfo,
   logUnsupportedProtocol,
   logStoppedMessage,
+  logBuilderSubMessage,
 }
