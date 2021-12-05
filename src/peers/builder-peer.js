@@ -8,8 +8,8 @@
   that are sent over libp2p's pubsub network.
 */
 
-import { toString as stringFromUInt8Array } from "uint8arrays"
 import { request_build_topic } from "../constants/topic-constants.js"
+import { parseMessage } from "../utility/message-utils.js"
 import * as logger from "../utility/log.js"
 import { createNode } from "../create-node.js"
 
@@ -31,11 +31,8 @@ class BuilderPeer {
 
     await peer.#node.start()
 
-    peer.#node.pubsub.on(request_build_topic, (msg) => {
-      logger.logBuilderSubMessage(
-        msg.from,
-        stringFromUInt8Array(msg.data) // TODO(Alan): JSON parse proper metadata
-      )
+    peer.#node.pubsub.on(request_build_topic, ({ from, data }) => {
+      logger.logBuilderSubMessage(from, parseMessage(data))
     })
 
     peer.#node.pubsub.subscribe(request_build_topic)
