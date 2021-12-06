@@ -1,11 +1,11 @@
 /*
   NOTE(Alan):
 
-  Commander effectively turns the program into a cli
+  Commander effectively turns the program into a cli.
   
   Every option registered below can be passed when running the script,
   and will be added to the program.opts() accordingly. It also makes it
-  possible to run `node {script} -h` to see available options
+  possible to run `node {script} -h` to see available options.
 */
 
 import { Command } from "commander"
