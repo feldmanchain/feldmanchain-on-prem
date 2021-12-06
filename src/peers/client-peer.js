@@ -33,9 +33,12 @@ class ClientPeer {
 
     peer.#node = await createNode()
 
+    
     peer.#node.on("peer:discovery", logger.logDiscoveredInfo)
-
+    
     await peer.#node.start()
+
+    logger.logNodeStartedInfo(peer.#node)
 
     return peer
   }

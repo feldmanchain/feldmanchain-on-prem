@@ -31,6 +31,8 @@ class BuilderPeer {
 
     await peer.#node.start()
 
+    logger.logNodeStartedInfo(peer.#node)
+
     peer.#node.pubsub.on(request_build_topic, ({ from, data }) => {
       logger.logBuilderSubMessage(from, parseMessage(data))
     })
