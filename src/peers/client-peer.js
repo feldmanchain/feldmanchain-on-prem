@@ -8,8 +8,8 @@
   over libp2p's pubsub network.
 */
 
-import { fromString as uInt8ArrayFromString } from "uint8arrays"
 import { request_build_topic } from "../constants/topic-constants.js"
+import { createMessage } from "../utility/message-utils.js"
 import * as logger from "../utility/log.js"
 import { createNode } from "../create-node.js"
 
@@ -17,10 +17,9 @@ class ClientPeer {
   #node
 
   requestBuild = () => {
-    this.#node.pubsub.publish(
-      request_build_topic,
-      uInt8ArrayFromString("{ type: nodejs, main: index.js }") // TODO(Alan): JSON stringify proper metadata
-    )
+    const data = { type: "nodejs", main: "index.js" }
+
+    this.#node.pubsub.publish(request_build_topic, createMessage(data))
   }
 
   stop = async () => {
@@ -34,9 +33,12 @@ class ClientPeer {
 
     peer.#node = await createNode()
 
+    
     peer.#node.on("peer:discovery", logger.logDiscoveredInfo)
-
+    
     await peer.#node.start()
+
+    logger.logNodeStartedInfo(peer.#node)
 
     return peer
   }

@@ -105,3 +105,4 @@ dist
 
 # node / libp2p / peer ids
 peer-ids/*
+!peer-ids/.gitkeep
