@@ -1,0 +1,12 @@
+package transport;
+
+message BuildRequest {
+    enum Type {
+        C = 0;
+        CPP = 1;
+        NODE_JS = 2;
+    }
+    
+    required Type type = 1 [default = C];
+    optional string main = 2;
+}

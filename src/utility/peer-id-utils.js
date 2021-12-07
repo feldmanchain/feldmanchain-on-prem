@@ -32,7 +32,7 @@ const getFilename = (peerName) => {
     return `${peerName}.json`
   }
 
-  const [file] = fs.readdirSync(peerIdsFolder, { encoding: "utf8" })
+  const [, file] = fs.readdirSync(peerIdsFolder, { encoding: "utf8" })
 
   return file || null
 }

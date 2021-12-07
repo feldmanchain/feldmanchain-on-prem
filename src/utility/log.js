@@ -46,8 +46,8 @@ const logStoppedMessage = () => {
   log("\n")
 }
 
-const logBuilderSubMessage = (from, metaData) => {
-  log("INCOMING BUILD REQUEST\nfrom:", from, "\nmetadata:", metaData)
+const logBuilderSubMessage = (from, data) => {
+  log("INCOMING BUILD REQUEST\nfrom:", from, "data:", data)
   log("\n")
 }
 

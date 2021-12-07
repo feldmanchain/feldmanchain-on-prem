@@ -34,7 +34,9 @@ class BuilderPeer {
     logger.logNodeStartedInfo(peer.#node)
 
     peer.#node.pubsub.on(request_build_topic, ({ from, data }) => {
-      logger.logBuilderSubMessage(from, parseMessage(data))
+      const message = parseMessage(data)
+
+      logger.logBuilderSubMessage(from, message)
     })
 
     peer.#node.pubsub.subscribe(request_build_topic)
