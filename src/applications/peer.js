@@ -7,6 +7,8 @@ const requestBuild = (libp2p) => {
   const data = { type: "nodejs", main: "index.js" }
 
   libp2p.pubsub.publish(request_build_topic, createMessage(data))
+
+  return data
 }
 
 const buildRequestListener = ({ from, data }) => {
