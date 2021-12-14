@@ -14,12 +14,17 @@ const program = new Command()
 
 program
   .version("0.0.1")
+  .option("-p, --port <number>", "Port", 3000)
+  .option("-q, --quiet <string>", "Disable logging")
   .option("-c, --capabilities [string...]", "Capabilities", [])
-  .option("-q, --quiet", "Disable logging")
-  .option("-n, --peer-name [string]", "The peerId filename", undefined)
+  .option("-n, --peer-name <string>", "The peerId filename", undefined)
 
 program.parse()
 
-const { capabilities, peerName, quiet } = program.opts()
+const opts = program.opts()
 
-export { capabilities, peerName, quiet }
+const { capabilities, peerName, quiet, port: portString } = opts
+
+const port = Number(portString)
+
+export { capabilities, peerName, quiet, port }

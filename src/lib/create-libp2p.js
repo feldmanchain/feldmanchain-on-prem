@@ -14,13 +14,13 @@ import Mplex from "libp2p-mplex"
 import MulticastDNS from "libp2p-mdns"
 import Gossipsub from "libp2p-gossipsub"
 import { NOISE } from "@chainsafe/libp2p-noise"
-import { peerName } from "./utility/cli-options.js"
-import { loadPeerId } from "./utility/peer-id-utils.js"
+import { peerName } from "./cli-options.js"
+import { loadPeerId } from "./peer-id-utils.js"
 
-const createNode = async () => {
+const createLibp2p = async () => {
   const peerId = await loadPeerId(peerName)
 
-  const node = await Libp2p.create({
+  const libp2p = await Libp2p.create({
     peerId,
     addresses: {
       listen: ["/ip4/0.0.0.0/tcp/0"],
@@ -42,7 +42,7 @@ const createNode = async () => {
     },
   })
 
-  return node
+  return libp2p
 }
 
-export { createNode }
+export { createLibp2p }
