@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <header>
+    <title>feldmanchain - {{peerID}}</title>
+    <style>
+      html,
+      body,
+      .container {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+      }
+
+      aside,
+      main {
+        box-sizing: border-box;
+        height: 100%;
+        padding: 1em;
+      }
+
+      .container {
+        display: grid;
+        grid-template-columns: 400px auto;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      aside {
+        border-right: 1px solid black;
+      }
+
+      main {
+        text-align: center;
+      }
+    </style>
+  </header>
+
+  <body>
+    <div class="container">
+      <aside class="aside">
+        <div>
+          <button id="start-btn">Start accepting build requests</button>
+        </div>
+
+        <br />
+
+        <div><button id="stop-btn">Stop accepting build requests</button></div>
+
+        <br />
+
+        <div><button id="send-btn">Send build request</button></div>
+      </aside>
+
+      <main>
+        <h1>Feldmanchain</h1>
+
+        <h2>{{peerID}}</h2>
+
+        <h3>Listening on</h3>
+
+        <ul>
+          {{addresses}}
+        </ul>
+      </main>
+    </div>
+
+    <script>
+      window.onload = () => {
+        document.getElementById("start-btn").onclick = () => {
+          fetch("/build-request/start-accepting")
+            .then((res) => res.text())
+            .then(console.log)
+        }
+        document.getElementById("stop-btn").onclick = () => {
+          fetch("/build-request/stop-accepting")
+            .then((res) => res.text())
+            .then(console.log)
+        }
+
+        document.getElementById("send-btn").onclick = () => {
+          fetch("/build-request/send")
+            .then((res) => res.text())
+            .then(console.log)
+        }
+      }
+    </script>
+  </body>
+</html>
