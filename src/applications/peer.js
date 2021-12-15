@@ -11,23 +11,26 @@ const requestBuild = (libp2p) => {
   return data
 }
 
-const buildRequestListener = ({ from, data }) => {
-  logger.logBuilderSubMessage(from, parseMessage(data))
-}
+const buildRequestListener =
+  (cb) =>
+  ({ from, data }) => {
+    const message = parseMessage(data)
 
-const startAcceptingBuildRequests = (libp2p) => {
+    logger.logBuilderSubMessage(from, message)
+    cb(from, message)
+  }
+
+const startAcceptingBuildRequests = (libp2p, cb) => {
   console.log("accepting build requests")
 
-  libp2p.pubsub.on(request_build_topic, buildRequestListener)
-
+  libp2p.pubsub.on(request_build_topic, buildRequestListener(cb))
   libp2p.pubsub.subscribe(request_build_topic)
 }
 
 const stopAcceptingBuildRequests = (libp2p) => {
   console.log("stopped accepting build requests")
 
-  libp2p.pubsub.off(request_build_topic, buildRequestListener)
-
+  libp2p.pubsub.off(request_build_topic, buildRequestListener())
   libp2p.pubsub.unsubscribe(request_build_topic)
 }
 

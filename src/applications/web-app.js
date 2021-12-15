@@ -11,9 +11,12 @@ const app = express()
 
 // TODO(Alan): Add proper HTTP methods, Authentication etc
 
-const createWebApp = (peer) => {
+const createWebApp = (peer, wsApp) => {
   app.get("/build-request/start-accepting", (_, res) => {
-    startAcceptingBuildRequests(peer)
+    startAcceptingBuildRequests(peer, (from, message) => {
+      console.log(wsApp) //.send(from)
+      //console.log("use ws app to push to client")
+    })
 
     res.status(200).send("Started accepting build requests")
   })
@@ -30,7 +33,7 @@ const createWebApp = (peer) => {
     res.status(200).json(data)
   })
 
-  const htmlFilepath = path.join(process.cwd(), "public/index.html")
+  const htmlFilePath = path.join(process.cwd(), "public/index.html")
 
   app.get("/", (_, res) => {
     const peerId = peer.peerId.toB58String()
@@ -39,7 +42,7 @@ const createWebApp = (peer) => {
       .join("\n")
 
     const html = fs
-      .readFileSync(htmlFilepath, "utf-8")
+      .readFileSync(htmlFilePath, "utf-8")
       .replace(/{{peerID}}/g, peerId)
       .replace(/{{addresses}}/g, addresses)
 
