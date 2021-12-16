@@ -9,12 +9,14 @@ const requestBuild = (libp2p) => {
   libp2p.pubsub.publish(request_build_topic, createMessage(data))
 }
 
+const buildRequestListener = ({ from, data }) => {
+  logger.logBuilderSubMessage(from, parseMessage(data))
+}
+
 const startAcceptingBuildRequests = (libp2p) => {
   console.log("accepting build requests")
 
-  libp2p.pubsub.on(request_build_topic, ({ from, data }) => {
-    logger.logBuilderSubMessage(from, parseMessage(data))
-  })
+  libp2p.pubsub.on(request_build_topic, buildRequestListener)
 
   libp2p.pubsub.subscribe(request_build_topic)
 }
@@ -22,7 +24,7 @@ const startAcceptingBuildRequests = (libp2p) => {
 const stopAcceptingBuildRequests = (libp2p) => {
   console.log("stopped accepting build requests")
 
-  libp2p.pubsub.off(request_build_topic)
+  libp2p.pubsub.off(request_build_topic, buildRequestListener)
 
   libp2p.pubsub.unsubscribe(request_build_topic)
 }
