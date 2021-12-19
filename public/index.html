@@ -122,6 +122,7 @@
 
     <script>
       window.onload = () => {
+<<<<<<< HEAD
         const startBtn = document.getElementById("start-btn")
         const stopBtn = document.getElementById("stop-btn")
         const sendBtn = document.getElementById("send-btn")
@@ -158,6 +159,41 @@
 
               sentRequestsList.appendChild(li)
             })
+=======
+        // NOTE(Alan): port is injected from server
+        const port = `{{port}}`
+
+        const ws = new WebSocket(`ws://localhost:${port}`)
+        ws.binaryType = "arraybuffer"
+
+        ws.onopen = (e) => {}
+        ws.onmessage = ({ data }) => {
+          const arr = new Uint8Array(data)
+          const message = JSON.parse(
+            decodeURIComponent(escape(String.fromCharCode(...arr)))
+          )
+
+          // TODO(Alan): Display incoming requests
+          console.log(message)
+        }
+
+        document.getElementById("start-btn").onclick = () => {
+          fetch("/build-request/start-accepting", { method: "POST" })
+            .then((res) => res.text())
+            .then(console.log)
+        }
+
+        document.getElementById("stop-btn").onclick = () => {
+          fetch("/build-request/stop-accepting", { method: "POST" })
+            .then((res) => res.text())
+            .then(console.log)
+        }
+
+        document.getElementById("send-btn").onclick = () => {
+          fetch("/build-request/send", { method: "POST" })
+            .then((res) => res.text())
+            .then(console.log)
+>>>>>>> 001b7bd (remove express in favor of uwebsockets and add push to client on received build request)
         }
       }
     </script>
