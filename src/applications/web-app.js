@@ -1,5 +1,6 @@
 import fs from "fs"
 import path from "path"
+import { stringify } from "querystring"
 import WS from "uWebSockets.js"
 import {
   requestBuild,
@@ -37,17 +38,10 @@ const createWebApp = (peer, port) => {
     res.writeStatus("200 OK").end("Stopped accepting build requests")
   })
 
-<<<<<<< HEAD
-  app.get("/build-request/send", (_, res) => {
+  app.post("/build-request/send", (res) => {
     const data = requestBuild(peer)
 
-    res.status(200).json(data)
-=======
-  app.post("/build-request/send", (res) => {
-    requestBuild(peer)
-
-    res.writeStatus("200 OK").end("Build request sent")
->>>>>>> 001b7bd (remove express in favor of uwebsockets and add push to client on received build request)
+    res.writeStatus("200 OK").end(JSON.stringify(data))
   })
 
   app.get("/*", (res) => {
