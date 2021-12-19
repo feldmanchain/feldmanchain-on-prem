@@ -115,6 +115,8 @@
 
           <div>
             <h4>Incoming requests</h4>
+
+            <ul id="incoming-requests"></ul>
           </div>
         </main>
       </div>
@@ -122,6 +124,14 @@
 
     <script>
       window.onload = () => {
+        const startBtn = document.getElementById("start-btn")
+        const stopBtn = document.getElementById("stop-btn")
+        const sendBtn = document.getElementById("send-btn")
+        const statusSection = document.getElementById("status-section")
+        const sentRequestsList = document.getElementById("sent-requests")
+        const incomingRequestsList =
+          document.getElementById("incoming-requests")
+
         // NOTE(Alan): port is injected from server
         const port = `{{port}}`
 
@@ -131,19 +141,18 @@
         ws.onopen = (e) => {}
         ws.onmessage = ({ data }) => {
           const arr = new Uint8Array(data)
-          const message = JSON.parse(
-            decodeURIComponent(escape(String.fromCharCode(...arr)))
+          const message = decodeURIComponent(
+            escape(String.fromCharCode(...arr))
           )
 
-          // TODO(Alan): Display incoming requests
-          console.log(message)
-        }
+          const pre = document.createElement("pre")
+          pre.innerText = JSON.stringify(JSON.parse(message), null, 4)
 
-        const startBtn = document.getElementById("start-btn")
-        const stopBtn = document.getElementById("stop-btn")
-        const sendBtn = document.getElementById("send-btn")
-        const statusSection = document.getElementById("status-section")
-        const sentRequestsList = document.getElementById("sent-requests")
+          const li = document.createElement("li")
+          li.appendChild(pre)
+
+          incomingRequestsList.appendChild(li)
+        }
 
         startBtn.onclick = () => {
           fetch("/build-request/start-accepting", { method: "POST" }).then(
