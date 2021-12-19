@@ -36,7 +36,10 @@ const stopAcceptingBuildRequests = (libp2p) => {
 
   isAcceptingBuildRequests = false
 
-  libp2p.pubsub.off(request_build_topic, buildRequestListener())
+  libp2p.pubsub.off(
+    request_build_topic,
+    buildRequestListener((f) => f)
+  )
   libp2p.pubsub.unsubscribe(request_build_topic)
 }
 
