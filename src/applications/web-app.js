@@ -1,6 +1,5 @@
 import fs from "fs"
 import path from "path"
-import { stringify } from "querystring"
 import WS from "uWebSockets.js"
 import {
   requestBuild,
@@ -21,7 +20,6 @@ const createWebApp = (peer, port) => {
     open: (socket, res) => {
       socket.subscribe("build-request/incoming")
     },
-    message: (ws, ab) => app.publish("all", ab),
   })
 
   app.post("/build-request/start-accepting", (res) => {
