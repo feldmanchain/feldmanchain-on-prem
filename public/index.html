@@ -12,8 +12,15 @@
       }
 
       aside,
-      main {
+      main,
+      header,
+      .content,
+      .container {
         box-sizing: border-box;
+      }
+
+      aside,
+      main {
         height: 100%;
         padding: 1em;
       }
@@ -31,8 +38,34 @@
         border-right: 1px solid black;
       }
 
-      main {
+      #start-btn,
+      #stop-btn,
+      #send-btn,
+      #status-section {
+        width: 100%;
+      }
+
+      #status-section {
         text-align: center;
+      }
+
+      .content {
+        display: grid;
+        grid-template-rows: 210px auto;
+      }
+
+      header {
+        text-align: center;
+      }
+
+      header {
+        border-bottom: 1px solid black;
+        margin-bottom: -1px;
+      }
+
+      main {
+        display: grid;
+        grid-template-columns: 50% 50%;
       }
     </style>
   </header>
@@ -46,43 +79,85 @@
 
         <br />
 
-        <div><button id="stop-btn">Stop accepting build requests</button></div>
+        <div>
+          <button id="stop-btn" disabled>Stop accepting build requests</button>
+        </div>
 
         <br />
 
         <div><button id="send-btn">Send build request</button></div>
+
+        <br />
+        <br />
+
+        <div id="status-section">Not accepting build requests</div>
       </aside>
 
-      <main>
-        <h1>Feldmanchain</h1>
+      <div class="content">
+        <header>
+          <h2>Feldmanchain</h2>
 
-        <h2>{{peerID}}</h2>
+          <h3>{{peerID}}</h3>
 
-        <h3>Listening on</h3>
+          <h4>Listening on</h4>
 
-        <ul>
-          {{addresses}}
-        </ul>
-      </main>
+          <ul>
+            {{addresses}}
+          </ul>
+        </header>
+
+        <main>
+          <div>
+            <h4>Sent requests</h4>
+
+            <ul id="sent-requests"></ul>
+          </div>
+
+          <div>
+            <h4>Incoming requests</h4>
+          </div>
+        </main>
+      </div>
     </div>
 
     <script>
       window.onload = () => {
-        document.getElementById("start-btn").onclick = () => {
-          fetch("/build-request/start-accepting")
-            .then((res) => res.text())
-            .then(console.log)
-        }
-        document.getElementById("stop-btn").onclick = () => {
-          fetch("/build-request/stop-accepting")
-            .then((res) => res.text())
-            .then(console.log)
+        const startBtn = document.getElementById("start-btn")
+        const stopBtn = document.getElementById("stop-btn")
+        const sendBtn = document.getElementById("send-btn")
+        const statusSection = document.getElementById("status-section")
+        const sentRequestsList = document.getElementById("sent-requests")
+
+        startBtn.onclick = () => {
+          fetch("/build-request/start-accepting").then(() => {
+            startBtn.toggleAttribute("disabled")
+            stopBtn.removeAttribute("disabled")
+
+            statusSection.innerText = "Accepting build requests"
+          })
         }
 
-        document.getElementById("send-btn").onclick = () => {
+        stopBtn.onclick = () => {
+          fetch("/build-request/stop-accepting").then(() => {
+            stopBtn.toggleAttribute("disabled")
+            startBtn.removeAttribute("disabled")
+
+            statusSection.innerText = "Not accepting build requests"
+          })
+        }
+
+        sendBtn.onclick = () => {
           fetch("/build-request/send")
-            .then((res) => res.text())
-            .then(console.log)
+            .then((res) => res.json())
+            .then((json) => {
+              const pre = document.createElement("pre")
+              pre.innerText = JSON.stringify(json, null, 4)
+
+              const li = document.createElement("li")
+              li.appendChild(pre)
+
+              sentRequestsList.appendChild(li)
+            })
         }
       }
     </script>

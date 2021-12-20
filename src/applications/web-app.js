@@ -25,9 +25,9 @@ const createWebApp = (peer) => {
   })
 
   app.get("/build-request/send", (_, res) => {
-    requestBuild(peer)
+    const data = requestBuild(peer)
 
-    res.status(200).send("Build request sent")
+    res.status(200).json(data)
   })
 
   const htmlFilepath = path.join(process.cwd(), "public/index.html")
