@@ -4,9 +4,9 @@ import { createPeer, stopPeer } from "./applications/peer.js"
 import { createWebApp, startWebApp } from "./applications/web-app.js"
 
 const peer = await createPeer()
-const app = createWebApp(peer)
 
-startWebApp(app, port, () => open(`http://localhost:${port}`))
+const webApp = createWebApp(peer, port)
+startWebApp(webApp, port, () => open(`http://localhost:${port}`))
 
 const onProgramTerminated = async () => {
   await stopPeer(peer)

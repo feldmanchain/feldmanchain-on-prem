@@ -15,7 +15,6 @@
   "dependencies": {
     "@chainsafe/libp2p-noise": "^4.1.1",
     "commander": "^8.3.0",
-    "express": "^4.17.1",
     "it-length-prefixed": "^5.0.3",
     "it-pipe": "^1.1.0",
     "libp2p": "^0.35.1",
@@ -25,6 +24,7 @@
     "libp2p-noise": "^4.0.0",
     "libp2p-tcp": "^0.17.2",
     "open": "^8.4.0",
-    "uint8arrays": "^3.0.0"
+    "uint8arrays": "^3.0.0",
+    "uWebSockets.js": "github:uNetworking/uWebSockets.js#v20.3.0"
   }
 }

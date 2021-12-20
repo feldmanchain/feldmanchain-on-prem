@@ -1,56 +1,73 @@
 import fs from "fs"
 import path from "path"
-import express from "express"
+import { stringify } from "querystring"
+import WS from "uWebSockets.js"
 import {
+  requestBuild,
   startAcceptingBuildRequests,
   stopAcceptingBuildRequests,
-  requestBuild,
 } from "./peer.js"
 
-const app = express()
+const htmlFilePath = path.join(process.cwd(), "public/index.html")
 
-// TODO(Alan): Add proper HTTP methods, Authentication etc
+const createWebApp = (peer, port) => {
+  const app = WS.App()
 
-const createWebApp = (peer) => {
-  app.get("/build-request/start-accepting", (_, res) => {
-    startAcceptingBuildRequests(peer)
-
-    res.status(200).send("Started accepting build requests")
+  app.ws("/*", {
+    idleTimeout: 32,
+    maxBackpressure: 1024,
+    maxPayloadLength: 512,
+    compression: WS.DEDICATED_COMPRESSOR_3KB,
+    open: (socket, res) => {
+      socket.subscribe("build-request/incoming")
+    },
+    message: (ws, ab) => app.publish("all", ab),
   })
 
-  app.get("/build-request/stop-accepting", (_, res) => {
+  app.post("/build-request/start-accepting", (res) => {
+    startAcceptingBuildRequests(peer, (from, data) => {
+      app.publish("build-request/incoming", data, true)
+    })
+
+    res.writeStatus("200 OK").end("Started accepting build requests")
+  })
+
+  app.post("/build-request/stop-accepting", (res) => {
     stopAcceptingBuildRequests(peer)
 
-    res.status(200).send("Stopped accepting build requests")
+    res.writeStatus("200 OK").end("Stopped accepting build requests")
   })
 
-  app.get("/build-request/send", (_, res) => {
+  app.post("/build-request/send", (res) => {
     const data = requestBuild(peer)
 
-    res.status(200).json(data)
+    res.writeStatus("200 OK").end(JSON.stringify(data))
   })
 
-  const htmlFilepath = path.join(process.cwd(), "public/index.html")
-
-  app.get("/", (_, res) => {
+  app.get("/*", (res) => {
     const peerId = peer.peerId.toB58String()
     const addresses = peer.multiaddrs
       .map((ma) => `<li>${ma.toString()}/p2p/${peerId}</li>`)
       .join("\n")
 
     const html = fs
-      .readFileSync(htmlFilepath, "utf-8")
+      .readFileSync(htmlFilePath, "utf-8")
       .replace(/{{peerID}}/g, peerId)
       .replace(/{{addresses}}/g, addresses)
+      .replace(/`{{port}}`/g, port)
 
-    return res.status(200).send(html)
+    res.writeStatus("200 OK").end(html)
   })
 
   return app
 }
 
 const startWebApp = (app, port, cb) => {
-  app.listen(port, cb)
+  app.listen(port, (listenSocket) => {
+    if (listenSocket) {
+      cb()
+    }
+  })
 }
 
 export { createWebApp, startWebApp }

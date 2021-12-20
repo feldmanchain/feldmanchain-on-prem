@@ -3,6 +3,10 @@ import { createMessage, parseMessage } from "../lib/message-utils.js"
 import { createLibp2p } from "../lib/create-libp2p.js"
 import * as logger from "../lib/log.js"
 
+// TODO(Alan): Make this a class for re-usability
+
+let isAcceptingBuildRequests = false
+
 const requestBuild = (libp2p) => {
   const data = { type: "nodejs", main: "index.js" }
 
@@ -11,23 +15,31 @@ const requestBuild = (libp2p) => {
   return data
 }
 
-const buildRequestListener = ({ from, data }) => {
-  logger.logBuilderSubMessage(from, parseMessage(data))
-}
+const buildRequestListener =
+  (cb) =>
+  ({ from, data }) => {
+    logger.logBuilderSubMessage(from, parseMessage(data))
+    cb(from, data)
+  }
 
-const startAcceptingBuildRequests = (libp2p) => {
-  console.log("accepting build requests")
+const startAcceptingBuildRequests = (libp2p, cb) => {
+  if (isAcceptingBuildRequests) return
 
-  libp2p.pubsub.on(request_build_topic, buildRequestListener)
+  isAcceptingBuildRequests = true
 
+  libp2p.pubsub.on(request_build_topic, buildRequestListener(cb))
   libp2p.pubsub.subscribe(request_build_topic)
 }
 
 const stopAcceptingBuildRequests = (libp2p) => {
-  console.log("stopped accepting build requests")
+  if (!isAcceptingBuildRequests) return
 
-  libp2p.pubsub.off(request_build_topic, buildRequestListener)
+  isAcceptingBuildRequests = false
 
+  libp2p.pubsub.off(
+    request_build_topic,
+    buildRequestListener((f) => f)
+  )
   libp2p.pubsub.unsubscribe(request_build_topic)
 }
 
